@@ -1,0 +1,24 @@
+{
+  "name": "bullfrog",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "client": "cd client && yarn start",
+    "dev-server": "nodemon ./bin/www",
+    "dev-start": "concurrently --kill-others-on-fail \"yarn dev-server\" \"yarn client\""
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "dotenv": "^6.2.0",
+    "express": "~4.16.0",
+    "knackhq-client": "git+https://github.com/john-raymon/knackhq-client.git",
+    "mongoose": "^5.4.17",
+    "morgan": "~1.9.0",
+    "node-sass-middleware": "0.11.0"
+  },
+  "devDependencies": {
+    "concurrently": "^4.1.0"
+  }
+}
