@@ -13,10 +13,12 @@
     "debug": "~2.6.9",
     "dotenv": "^6.2.0",
     "express": "~4.16.0",
-    "knackhq-client": "git+https://github.com/john-raymon/knackhq-client.git",
+    "knackhq-client": "https://github.com/john-raymon/knackhq-client.git",
     "mongoose": "^5.4.17",
     "morgan": "~1.9.0",
-    "node-sass-middleware": "0.11.0"
+    "node-sass-middleware": "0.11.0",
+    "superagent": "^4.1.0",
+    "superagent-promise": "^1.1.0"
   },
   "devDependencies": {
     "concurrently": "^4.1.0"
