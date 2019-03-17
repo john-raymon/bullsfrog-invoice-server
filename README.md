@@ -4,7 +4,7 @@ BullsFrog invoice/estimating application
 # API
 
 ## Credentials
->Neccessary to communicate with [Knack's Object Based Request API](https://www.knack.com/developer-documentation/#using-the-api)  
+>Neccessary to communicate with [Knack's View Based Request API](https://www.knack.com/developer-documentation/#using-the-api)  
 
 ## Authentication 
 Auth will be in sync with the main BullsFrog Knack's App. 
