@@ -924,7 +924,7 @@ kareem@2.3.0:
 
 "knackhq-client@https://github.com/john-raymon/knackhq-client.git":
   version "1.0.0"
-  resolved "https://github.com/john-raymon/knackhq-client.git#331777832c68321fb796a59a6c3395c38ce801c4"
+  resolved "https://github.com/john-raymon/knackhq-client.git#b2dfa00b11c0946b1cf0d9c71ce94f3a0bc750a1"
   dependencies:
     axios "^0.18.0"
     dotenv "^6.2.0"
