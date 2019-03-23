@@ -5,9 +5,9 @@ var auth = require('./auth')
 
 /* GET users listing. */
 router.get('/invoices-to-do', auth.required, function(req, res, next) {
-  console.log('the query is', req.query, req.query.page, req.query.rows_per_page)
+  console.log('the query is', req.query, req.query.page, req.query.rows_per_page, req.query.sort_field, req.query.sort_order)
   const client = new ViewBasedClient({app_id: process.env.APP_ID, token: req.knackAuth.token});
-  client.getAllRecords('445', '839', req.query.filters, req.query.page, req.query.rows_per_page).then((data) => {
+  client.getAllRecords('445', '839', req.query.filters, req.query.page, req.query.rows_per_page, req.query.sort_field, req.query.sort_order).then((data) => {
     if (!data.error) {
       return res.json(data.response.body)
     }
