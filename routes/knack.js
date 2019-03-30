@@ -15,5 +15,31 @@ router.get('/invoices-to-do', auth.required, function(req, res, next) {
   }).catch(next)
 });
 
+/* Search USERS */
+router.get('/search-customers', auth.required, function(req, res, next) {
+  let searchFor = req.query.searchFor || ''
+  const client = new ViewBasedClient({
+    app_id: process.env.APP_ID,
+    token: req.knackAuth.token,
+  })
+  const filters = {
+    "match": "or",
+    "rules": [
+      {
+        "field": "field_15",
+        "operator": "contains",
+        "value": searchFor
+      }
+    ]
+  }
+  client.getAllRecords('20', '120', filters, null, null, null, null).then((data) => {
+    console.log('the response in search-customers is', data)
+    if (!data.error) {
+      return res.json(data.response.body)
+    }
+    return res.status(res.statusCode).json({ error:  data.error })
+  }).catch(next)
+})
+
 
 module.exports = router;
