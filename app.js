@@ -13,6 +13,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+// require models
+require("./models/Room")
+require("./models/Invoice")
+
 app.use(require('./routes'));
 
 if (process.env.NODE_ENV === 'production') {
