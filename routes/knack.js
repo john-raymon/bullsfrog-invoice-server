@@ -1,5 +1,5 @@
 var express = require('express');
-var { ViewBasedClient }  = require('knackhq-client');
+var { ViewBasedClient } = require('knackhq-client');
 var router = express.Router();
 var auth = require('./auth')
 
