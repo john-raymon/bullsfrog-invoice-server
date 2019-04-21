@@ -9,7 +9,6 @@ const Invoice = require('./../models/Invoice')
 // create or update existing invoice
 router.post('/:invoiceUUID', parser.array('invoiceImages'), function(req, res, next) {
   const invoiceUUID = req.params.invoiceUUID
-  console.log('the invoice is', req.body)
   // check if invoiceUUID exist
   // find or create invoice, then check if it is a draft,
   // if it isn't redirect client to pdf detailed version of invoice
@@ -51,8 +50,10 @@ router.post('/:invoiceUUID', parser.array('invoiceImages'), function(req, res, n
       if (req.body.rooms !== undefined || typeof req.body.rooms !== 'undefined') {
         const rooms = req.body.rooms
         const roomUUIDs = Object.keys(rooms)
+        console.log('these are the rooms', roomUUIDs)
+
         if (roomUUIDs.length > 0) {
-          req.body.rooms = rooms
+          invoice.rooms = rooms
         }
       }
       if (req.body.totalCost !== undefined || typeof req.body.totalCost !== 'undefined') {
