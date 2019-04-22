@@ -1,13 +1,37 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
+const cloudinary = require("cloudinary")
 const auth = require('./auth')
 const parser = require('./../config/multer-cloudinary')
 
 // Models
 const Invoice = require('./../models/Invoice')
 
+// Destroy image from existing Invoice document, and also from Cloudinary folder
+router.post("/:invoiceUUID/remove-image/:publicId", auth.required, function(req, res, next) {
+  const { invoiceUUID, publicId } = req.params
+  new Promise((resolve, reject) => {
+    cloudinary.v2.uploader.destroy(publicId, {}, (error, result) => {
+      if (error) reject(error)
+      resolve(result)
+    });
+  }).then((result) => {
+    // remove image from Invoice document
+    return Invoice.findOne({ id: invoiceUUID })
+  }).then((invoice) => {
+    let invoiceObject = {}
+    for (let [key, value] of invoice.images) {
+      invoiceObject[key] = value;
+    }
+    invoice.images = {...invoiceObject, [publicId]: undefined }
+    return invoice.save()
+  }).then((invoice) => res.json(invoice)).catch(next)
+
+})
+
+
 // create or update existing invoice
-router.post('/:invoiceUUID', parser.array('invoiceImages'), function(req, res, next) {
+router.post('/:invoiceUUID', auth.required, parser.array('invoiceImages'), function(req, res, next) {
   const invoiceUUID = req.params.invoiceUUID
   // check if invoiceUUID exist
   // find or create invoice, then check if it is a draft,
@@ -15,10 +39,21 @@ router.post('/:invoiceUUID', parser.array('invoiceImages'), function(req, res, n
   new Promise((resolve, reject) => {
     Invoice.findOrCreate({ id: invoiceUUID }, function(err, invoice) {
       if (err) reject(err)
-      if (invoice.draft !== true) res.status(422).json("This invoice can no longer be edited since it is no longer a draft")
+      if (invoice.draft !== true) res.status(422).json({ error: "NOT_DRAFT"})
       if (req.files) {
-        const newImages = req.files.map((file) => file.url)
-        invoice.images = [...invoice.images, ...newImages]
+        const allFiles = req.files
+        const newImages = allFiles.reduce((newImagesObj, file) => {
+          newImagesObj[file.public_id] = {
+            url: file.url,
+            public_id: file.public_id
+          }
+          return newImagesObj
+        },{})
+        let invoiceImagesObject = {};
+        for (let [key, value] of invoice.images) {
+          invoiceImagesObject[key] = value;
+        }
+        invoice.images = {...invoiceImagesObject, ...newImages}
       }
       if (req.body.invoiceName !== undefined || typeof req.body.invoiceName !== 'undefined') {
         invoice.invoiceName = req.body.invoiceName
@@ -50,8 +85,6 @@ router.post('/:invoiceUUID', parser.array('invoiceImages'), function(req, res, n
       if (req.body.rooms !== undefined || typeof req.body.rooms !== 'undefined') {
         const rooms = req.body.rooms
         const roomUUIDs = Object.keys(rooms)
-        console.log('these are the rooms', roomUUIDs)
-
         if (roomUUIDs.length > 0) {
           invoice.rooms = rooms
         }
