@@ -4,7 +4,13 @@ const findOrCreate = require("mongoose-find-or-create")
 const InvoiceSchema = new mongoose.Schema({
   id: { type: String, index: true },
   invoiceName: { type: String },
-  images: [String],
+  images: {
+    type: Map,
+    of: {
+      url: String,
+      public_id: { type: String, index: true }
+    }
+  },
   draft: { type: Boolean, default: true },
   customer: {
     customerKnackId: String,
