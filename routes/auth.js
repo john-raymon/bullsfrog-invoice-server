@@ -2,7 +2,6 @@ const { ViewBasedClient }  = require('knackhq-client');
 
 
 function getTokenFromHeader(req){
-
   if (req.headers.authorization) {
     return req.headers.authorization;
   }
