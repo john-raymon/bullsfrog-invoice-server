@@ -3,28 +3,29 @@ const findOrCreate = require("mongoose-find-or-create")
 
 const InvoiceSchema = new mongoose.Schema({
   id: { type: String, index: true },
-  invoiceName: { type: String },
+  invoiceName: { type: String, default: '' },
   images: {
     type: Map,
     of: {
       url: String,
       public_id: { type: String, index: true }
-    }
+    },
+    default: new Map()
   },
   draft: { type: Boolean, default: true },
   customer: {
-    customerKnackId: String,
-    fullName: String,
-    address: String,
-    cityState: String,
-    zipCode: String
+    customerKnackId: { type: String, default: '' },
+    fullName: { type: String, default: '' },
+    address: { type: String, default: '' },
+    cityState: { type: String, default: '' },
+    zipCode: { type: String, default: '' }
   },
   salesTaxPercentageUsed: { type: Number, default: "0" },
   claim: {
-    insuranceCarrier: String,
-    policyNumber: String,
-    claimNumber: String, // adjusters name replacement,
-    dateOfLoss: String,
+    insuranceCarrier: { type: String, default: '' },
+    policyNumber: { type: String, default: '' },
+    claimNumber: { type: String, default: '' }, // adjusters name replacement,
+    dateOfLoss: { type: String, default: '' },
   },
   rooms: {
     type: Map,
@@ -53,9 +54,9 @@ const InvoiceSchema = new mongoose.Schema({
       height: String,
     }
   },
-  totalCost: String,
-  totalLaborCost: String,
-  totalMaterialCost: String
+  totalCost: { type: String, default: '0.00' },
+  totalLaborCost: { type: String, default: '0.00' },
+  totalMaterialCost: { type: String, default: '0.00' }
 }, { id: false})
 
 InvoiceSchema.plugin(findOrCreate)
