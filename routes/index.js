@@ -10,6 +10,8 @@ router.use('/knack', require('./knack'))
 // save invoices
 router.use('/invoices', require('./invoices'))
 
+// settings route
+router.use("/settings", require('./settings'))
 
 // error handler; catches UnauthorizedError, otherwise calls next errorhandler in stack
 router.use(function(err, req, res, next) {
