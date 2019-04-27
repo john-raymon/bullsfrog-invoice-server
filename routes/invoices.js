@@ -4,9 +4,30 @@ const request = require('request')
 const cloudinary = require("cloudinary")
 const auth = require('./auth')
 const parser = require('./../config/multer-cloudinary')
+var qr = require('qr-image');
 
 // Models
 const Invoice = require('./../models/Invoice')
+
+router.get('/all', auth.required, function(req, res, next) {
+  Invoice.find({})
+  .then((invoices) => {
+    res.json({ invoices: invoices })
+  })
+  .catch(next)
+})
+
+router.get('/:invoiceUUID/qr', function(req, res, next){
+  const { invoiceUUID } = req.params
+  Invoice.findOne({ id: invoiceUUID, draft: false })
+  .then((invoice) => {
+    if (!invoice) res.status(404)
+    const code = qr.image(`${process.env.HOST_URL}/invoices/pdf/${invoice.id}`, { type: 'png' });
+    res.setHeader('Content-type', 'image/png');  //sent qr image to client side
+    code.pipe(res);
+  })
+  .catch(next)
+});
 
 
 router.post('/:invoiceUUID/generate-invoice', auth.required, function(req, res, next) {
@@ -17,20 +38,20 @@ router.post('/:invoiceUUID/generate-invoice', auth.required, function(req, res, 
   }).then(({ customer, id:invoiceUUID }) => {
     const { customerKnackId } = customer
     if (customerKnackId.trim()) {
-      const generatedURL = `http://localhost:3000/invoices/pdf/${invoiceUUID}`
+      const generatedURL = `${process.env.HOST_URL}/invoices/pdf/${invoiceUUID}`
       // save this url on Knack database with a connection to customer with customerKnackId
       request({
-        url: "https://api.knack.com/v1/objects/object_78/records",
+        url: `https://api.knack.com/v1/objects/${process.env.KNACK_GENERATED_INVOICES_OBJECT}/records`,
         method: "POST",
         headers: {
           "X-Knack-REST-API-Key": process.env.KNACK_API_KEY,
           "X-Knack-Application-Id": process.env.APP_ID
         },
         form: {
-        	field_574: {
+        	[process.env.KNACK_GENERATED_INVOICES_URL_FIELD]: {
             url : generatedURL
           },
-        	field_573: customerKnackId
+        	[process.env.KNACK_GENERATED_INVOICES_CUSTOMER_FIELD]: customerKnackId
         },
         json: true
       },
@@ -69,6 +90,15 @@ router.post("/:invoiceUUID/remove-image/:publicId", auth.required, function(req,
 
 })
 
+router.get('/:invoiceUUID', auth.required, function(req, res, next) {
+  const { invoiceUUID } = req.params
+  Invoice.findOne({ id: invoiceUUID, draft: false })
+  .then((invoice) => {
+    if (!invoice) res.status(404).json(`There is no generated pdf for the invoice with the id of ${invoiceUUID}`)
+    res.json({ invoice })
+  })
+  .catch(next)
+})
 
 // create or update existing invoice
 router.post('/:invoiceUUID', auth.required, parser.array('invoiceImages'), function(req, res, next) {
