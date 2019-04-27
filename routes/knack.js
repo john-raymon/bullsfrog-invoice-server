@@ -7,7 +7,7 @@ var auth = require('./auth')
 router.get('/invoices-to-do', auth.required, function(req, res, next) {
   console.log('the query is', req.query, req.query.page, req.query.rows_per_page, req.query.sort_field, req.query.sort_order)
   const client = new ViewBasedClient({app_id: process.env.APP_ID, token: req.knackAuth.token});
-  client.getAllRecords('445', '839', req.query.filters, req.query.page, req.query.rows_per_page, req.query.sort_field, req.query.sort_order).then((data) => {
+  client.getAllRecords(process.env.KNACK_INVOICES_TO_DO_SCENE, process.env.KNACK_INVOICES_TO_DO_VIEW, req.query.filters, req.query.page, req.query.rows_per_page, req.query.sort_field, req.query.sort_order).then((data) => {
     if (!data.error) {
       return res.json(data.response.body)
     }
@@ -22,7 +22,7 @@ router.get('/search-customers/:customer', auth.required, function(req, res, next
     token: req.knackAuth.token,
   })
   const options = {
-    url: `pages/scene_${'20'}/views/view_${'120'}/records/${req.params.customer}`,
+    url: `pages/scene_${process.env.KNACK_CUSTOMERS_TABLE_SCENE}/views/view_${process.env.KNACK_CUSTOMERS_TABLE_VIEW}/records/${req.params.customer}`,
     method: 'GET'
   }
 
@@ -53,13 +53,13 @@ router.get('/search-customers', auth.required, function(req, res, next) {
     "match": "or",
     "rules": [
       {
-        "field": "field_15",
+        "field": `${process.env.KNACK_CUSTOMERS_TABLE_NAME_FIELD}`,
         "operator": "contains",
         "value": searchFor
       }
     ]
   }
-  client.getAllRecords('20', '120', filters, null, null, null, null).then((data) => {
+  client.getAllRecords(process.env.KNACK_CUSTOMERS_TABLE_SCENE, process.env.KNACK_CUSTOMERS_TABLE_VIEW, filters, null, null, null, null).then((data) => {
     console.log('the response in search-customers is', data)
     if (!data.error) {
       return res.json(data.response.body)
