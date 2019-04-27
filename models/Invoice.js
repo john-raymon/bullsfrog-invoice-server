@@ -1,5 +1,5 @@
-const mongoose = require("mongoose")
-const findOrCreate = require("mongoose-find-or-create")
+var mongoose = require("mongoose")
+var findOrCreate = require("mongoose-find-or-create")
 
 const InvoiceSchema = new mongoose.Schema({
   id: { type: String, index: true },
