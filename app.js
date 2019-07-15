@@ -14,7 +14,10 @@ const isProduction = process.env.NODE_ENV === 'production'
 if (isProduction) {
   mongoose.connect(process.env.MONGODB_URI);
 } else {
-  mongoose.connect("mongodb://localhost/bullfrog_invoices", { useNewUrlParser: true });
+  mongoose.connect("mongodb://localhost/bullfrog_invoices", { useNewUrlParser: true })
+    .catch(error => {
+      console.log("Error connecting to dev MongoDB", error)
+    });
   mongoose.set("debug", true);
 }
 
