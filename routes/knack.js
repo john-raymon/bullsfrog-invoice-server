@@ -1,7 +1,7 @@
 var express = require('express');
 var { ViewBasedClient } = require('knackhq-client');
 var router = express.Router();
-var auth = require('./auth')
+var auth = require('./auth');
 
 /* GET invoices to do from Knack */
 router.get('/invoices-to-do', auth.required, function(req, res, next) {
