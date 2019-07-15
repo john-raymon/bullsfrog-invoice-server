@@ -13,6 +13,9 @@ router.use('/invoices', require('./invoices'))
 // settings route
 router.use("/settings", require('./settings'))
 
+// saved line-items for re-use endpoints
+router.use("/line-items", require('./line-items'))
+
 // error handler; catches UnauthorizedError, otherwise calls next errorhandler in stack
 router.use(function(err, req, res, next) {
   if (err.name === "UnauthorizedError") {
