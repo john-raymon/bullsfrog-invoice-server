@@ -4,10 +4,22 @@ const LineItemSchema = new mongoose.Schema({
   description: { type: String , required: [ true, 'is required'] },
   quantity: Number,
   unitOM: String,
-  unitPrice: Number,
-  total: Number
+  materialUnitPrice: String,
+  laborUnitPrice: String,
 })
 
-const Room = mongoose.model('Room', RoomSchema)
+LineItemSchema.methods.getLineItemObject = function() {
+  return {
+    id: this._id,
+    description: this.description,
+    quantity: this.quantity,
+    unitOM: this.unitOM,
+    materialUnitPrice: this.materialUnitPrice,
+    laborUnitPrice: this.laborUnitPrice
+  }
+}
 
-module.exports = Room
+const LineItem = mongoose.model('LineItem', LineItemSchema)
+
+
+module.exports = LineItem
