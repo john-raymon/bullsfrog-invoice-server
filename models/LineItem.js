@@ -13,7 +13,7 @@ LineItemSchema.methods.getLineItemObject = function() {
     id: this._id,
     description: this.description,
     quantity: this.quantity,
-    unitOM: this.unitOM,
+    uom: this.unitOM,
     materialUnitPrice: this.materialUnitPrice,
     laborUnitPrice: this.laborUnitPrice
   }
