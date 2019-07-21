@@ -2,7 +2,7 @@ var mongoose = require("mongoose")
 
 const LineItemSchema = new mongoose.Schema({
   description: { type: String , required: [ true, 'is required'] },
-  quantity: Number,
+  quantity: String,
   unitOM: String,
   materialUnitPrice: String,
   laborUnitPrice: String,
