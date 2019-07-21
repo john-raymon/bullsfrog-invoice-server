@@ -56,7 +56,8 @@ const InvoiceSchema = new mongoose.Schema({
   },
   totalCost: { type: String, default: '0.00' },
   totalLaborCost: { type: String, default: '0.00' },
-  totalMaterialCost: { type: String, default: '0.00' }
+  totalMaterialCost: { type: String, default: '0.00' },
+  creditToApply: { type: String, default: '0.00' }
 }, { id: false})
 
 InvoiceSchema.plugin(findOrCreate)
