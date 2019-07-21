@@ -192,4 +192,21 @@ router.post('/:invoiceUUID', auth.required, parser.array('invoiceImages'), funct
 
 })
 
+router.post('/:invoiceUUID/delete-draft', auth.required, function(req, res, next) {
+  const { invoiceUUID } = req.params
+  Invoice
+    .findOneAndDelete({ id: invoiceUUID, draft: true })
+    .then((invoice) => {
+      if (!invoice) return res.status(404).json({
+        success: false,
+        message: `We could not find a draft invoice with the id ${invoiceUUID} to remove.`
+      })
+      return res.json({
+        success: true,
+        invoice
+      })
+    })
+    .catch(next)
+})
+
 module.exports = router
