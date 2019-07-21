@@ -155,6 +155,9 @@ router.post('/:invoiceUUID', auth.required, parser.array('invoiceImages'), funct
       if (req.body.dateOfLoss !== undefined || typeof req.body.dateOfLoss !== 'undefined') {
         invoice.claim.dateOfLoss = req.body.dateOfLoss
       }
+      if (req.body.creditToApply !== undefined || typeof req.body.creditToApply !== 'undefined') {
+        invoice.creditToApply =  req.body.creditToApply
+      }
       if (req.body.rooms !== undefined || typeof req.body.rooms !== 'undefined') {
         const rooms = req.body.rooms
         const existingRoomsObj = {
