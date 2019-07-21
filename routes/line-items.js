@@ -23,7 +23,7 @@ router.post("/save", auth.required, function(req, res, next) {
     lineItemQuantity,
     lineItemUnitOM,
     lineItemMaterialUnitPrice,
-    lineItemMaterialLaborUnitPrice
+    lineItemLaborUnitPrice
   } = req.body;
   if (lineItemDescription === undefined || typeof lineItemDescription === 'undefined') {
     return res.status(400).json({
@@ -37,7 +37,7 @@ router.post("/save", auth.required, function(req, res, next) {
     quantity: lineItemQuantity,
     unitOM: lineItemUnitOM,
     materialUnitPrice: lineItemMaterialUnitPrice,
-    laborUnitPrice: lineItemMaterialLaborUnitPrice
+    laborUnitPrice: lineItemLaborUnitPrice
   })
   return newLineItem
     .save()
