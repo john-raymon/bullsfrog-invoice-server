@@ -50,7 +50,7 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  if (isProduction) {
+  if (!isProduction) {
     console.log(err.stack); // print stacktrace
   }
   res.status(err.status || 500);

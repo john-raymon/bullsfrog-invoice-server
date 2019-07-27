@@ -5,6 +5,7 @@ var auth = require('./auth')
 
 /* GET users listing. */
 router.post('/login', function(req, res, next) {
+  console.log(`this is the app id ${process.env.APP_ID}`)
   const client = new ViewBasedClient({app_id: process.env.APP_ID});
 
   const email = req.body.email;
